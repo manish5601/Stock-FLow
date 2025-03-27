@@ -1,0 +1,236 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile - StockFlow{% endblock %}
+{% block content %}
+    <!-- Profile Page Wrapper -->
+    <div class="profile-wrapper">
+        <div class="container py-5">
+            <h1 class="mb-4 text-center text-primary">User Profile</h1>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0 profile-card">
+                        <div class="card-body p-5">
+                            <div class="row align-items-center">
+                                <!-- Left Column: User Details -->
+                                <div class="col-md-7">
+                                    <h2 class="card-title mb-3 text-dark">Hello, {{ user.username }}!</h2>
+                                    {% if user_profile.full_name %}
+                                        <p class="card-text"><strong>Full Name:</strong> <span class="text-muted">{{ user_profile.full_name }}</span></p>
+                                    {% endif %}
+                                    <p class="card-text"><strong>Email:</strong> <span class="text-muted">{{ user.email }}</span></p>
+                                    {% if user_profile.bio %}
+                                        <p class="card-text"><strong>Bio:</strong> <span class="text-muted">{{ user_profile.bio }}</span></p>
+                                    {% endif %}
+                                    <p class="card-text"><strong>Date Joined:</strong> <span class="text-muted">{{ user.date_joined|date:"F d, Y" }}</span></p>
+                                    <p class="card-text"><strong>Last Login:</strong> <span class="text-muted">{{ user.last_login|date:"F d, Y, H:i" }}</span></p>
+                                    <div class="mt-4">
+                                        <a href="{% url 'edit_profile' %}" class="btn btn-primary professional-btn me-2">Edit Profile</a>
+                                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary professional-btn">Back to Dashboard</a>
+                                    </div>
+                                </div>
+                                <!-- Right Column: Profile Picture -->
+                                <div class="col-md-5 text-center">
+                                    {% if user_profile.profile_picture %}
+                                        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture rounded img-fluid shadow-sm">
+                                    {% else %}
+                                        <div class="profile-picture rounded bg-secondary d-flex align-items-center justify-content-center shadow-sm">
+                                            <span class="text-white" style="font-size: 2.5rem;">{{ user.username|first|upper }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom CSS for Profile Page -->
+    <style>
+        /* Profile Page Wrapper */
+        .profile-wrapper {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 110px; /* Navbar height (70px) + 40px gap */
+        }
+
+        body.bg-dark .profile-wrapper {
+            background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        }
+
+        .text-dark {
+            color: #212529 !important;
+        }
+
+        body.bg-dark .text-dark {
+            color: #f8f9fa !important;
+        }
+
+        .profile-card {
+            border-radius: 20px;
+            background-color: #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.bg-dark .profile-card {
+            background-color: #343a40;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        body.bg-dark .profile-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        body.bg-dark .card-title {
+            color: #f8f9fa;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #7f8c8d;
+        }
+
+        body.bg-dark .card-text {
+            color: #adb5bd;
+        }
+
+        .card-text strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        body.bg-dark .card-text strong {
+            color: #f8f9fa;
+        }
+
+        .text-muted {
+            color: #7f8c8d !important;
+        }
+
+        body.bg-dark .text-muted {
+            color: #adb5bd !important;
+        }
+
+        .profile-picture {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border: 4px solid #e9ecef;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        body.bg-dark .profile-picture {
+            border-color: #6c757d;
+        }
+
+        .profile-picture:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-picture.bg-secondary {
+            background-color: #6c757d !important;
+        }
+
+        body.bg-dark .profile-picture.bg-secondary {
+            background-color: #495057 !important;
+        }
+
+        .text-primary {
+            color: #007bff !important;
+        }
+
+        body.bg-dark .text-primary {
+            color: #66b0ff !important;
+        }
+
+        .professional-btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary.professional-btn {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary.professional-btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        body.bg-dark .btn-primary.professional-btn {
+            background-color: #66b0ff;
+            border-color: #66b0ff;
+        }
+
+        body.bg-dark .btn-primary.professional-btn:hover {
+            background-color: #4da8ff;
+            border-color: #4da8ff;
+        }
+
+        .btn-outline-secondary.professional-btn {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-outline-secondary.professional-btn:hover {
+            background-color: #6c757d;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        }
+
+        body.bg-dark .btn-outline-secondary.professional-btn {
+            border-color: #adb5bd;
+            color: #adb5bd;
+        }
+
+        body.bg-dark .btn-outline-secondary.professional-btn:hover {
+            background-color: #adb5bd;
+            color: #212529;
+        }
+
+        @media (max-width: 991px) {
+            .profile-wrapper {
+                padding-top: 140px; /* Collapsed navbar height (100px) + 40px gap */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .profile-picture {
+                width: 140px;
+                height: 140px;
+                margin: 0 auto 1.5rem;
+            }
+            .col-md-7, .col-md-5 {
+                text-align: center;
+            }
+            .col-md-5 {
+                margin-top: 2rem;
+            }
+        }
+
+        .navbar.shrunk ~ .content .profile-wrapper {
+            padding-top: 80px; /* Shrunk navbar height (40px) + 40px gap */
+        }
+    </style>
+{% endblock %}

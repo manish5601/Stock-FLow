@@ -1,0 +1,391 @@
+<!-- templates/edit_profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Profile - StockFlow{% endblock %}
+{% block content %}
+    <!-- Edit Profile Page Wrapper -->
+    <div class="edit-profile-wrapper">
+        <div class="container py-5">
+            <h1 class="mb-4 text-center text-primary">Edit Profile</h1>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card shadow-lg border-0 profile-card">
+                        <div class="card-body p-5">
+                            <!-- Form Errors -->
+                            {% if form.errors %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>Error:</strong> Please correct the errors below.
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                            <!-- Edit Profile Form -->
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- Email -->
+                                <div class="mb-4">
+                                    <label for="id_email" class="form-label">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-envelope field-icon"></i>
+                                        </span>
+                                        {{ form.email }}
+                                    </div>
+                                    {% if form.email.errors %}
+                                        <div class="text-danger mt-1">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Full Name -->
+                                <div class="mb-4">
+                                    <label for="id_full_name" class="form-label">Full Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-person field-icon"></i>
+                                        </span>
+                                        {{ form.full_name }}
+                                    </div>
+                                    {% if form.full_name.errors %}
+                                        <div class="text-danger mt-1">{{ form.full_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Profile Picture -->
+                                <div class="mb-4 text-center">
+                                    <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                                    <!-- Current Profile Picture -->
+                                    {% if user_profile.profile_picture %}
+                                        <div class="mb-3">
+                                            <img src="{{ user_profile.profile_picture.url }}" alt="Current Profile Picture" class="profile-picture rounded img-fluid shadow-sm" />
+                                        </div>
+                                    {% else %}
+                                        <div class="mb-3">
+                                            <div class="profile-picture rounded bg-secondary d-flex align-items-center justify-content-center shadow-sm">
+                                                <span class="text-white" style="font-size: 2rem">{{ user.username|first|upper }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <!-- Profile Picture Preview -->
+                                    <div class="mb-3">
+                                        <img id="profile-picture-preview" class="profile-picture rounded img-fluid shadow-sm d-none" alt="Profile Picture Preview" />
+                                    </div>
+                                    <!-- File Input -->
+                                    <div class="input-group">
+                                        {{ form.profile_picture }}
+                                        <button type="button" class="btn btn-outline-secondary professional-btn" onclick="clearProfilePicture()">Clear</button>
+                                    </div>
+                                    {% if form.profile_picture.errors %}
+                                        <div class="text-danger mt-1">{{ form.profile_picture.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Bio -->
+                                <div class="mb-4">
+                                    <label for="id_bio" class="form-label">Bio</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-text-paragraph field-icon"></i>
+                                        </span>
+                                        {{ form.bio }}
+                                    </div>
+                                    {% if form.bio.errors %}
+                                        <div class="text-danger mt-1">{{ form.bio.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Buttons -->
+                                <div class="d-flex justify-content-end">
+                                    <a href="{% url 'profile' %}" class="btn btn-outline-secondary professional-btn me-2">Cancel</a>
+                                    <button type="submit" class="btn btn-primary professional-btn" id="save-changes-btn">
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        <span class="button-text">Save Changes</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom CSS for Edit Profile Page -->
+    <style>
+        /* Edit Profile Page Wrapper */
+        .edit-profile-wrapper {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 110px; /* Navbar height (70px) + 40px gap */
+        }
+
+        body.bg-dark .edit-profile-wrapper {
+            background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+        }
+
+        .text-primary {
+            color: #007bff !important;
+        }
+
+        body.bg-dark .text-primary {
+            color: #66b0ff !important;
+        }
+
+        .profile-card {
+            border-radius: 20px;
+            background-color: #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.bg-dark .profile-card {
+            background-color: #343a40;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        body.bg-dark .profile-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .form-label {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        body.bg-dark .form-label {
+            color: #f8f9fa;
+        }
+
+        .form-control,
+        .form-control-file {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-control:focus,
+        .form-control-file:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        body.bg-dark .form-control,
+        body.bg-dark .form-control-file {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        body.bg-dark .form-control:focus,
+        body.bg-dark .form-control-file:focus {
+            border-color: #66b0ff;
+            box-shadow: 0 0 8px rgba(102, 176, 255, 0.2);
+        }
+
+        .form-control:hover,
+        .form-control-file:hover {
+            border-color: #007bff;
+        }
+
+        body.bg-dark .form-control:hover,
+        body.bg-dark .form-control-file:hover {
+            border-color: #66b0ff;
+        }
+
+        .input-group-text.bg-icon {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        body.bg-dark .input-group-text.bg-icon {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .field-icon {
+            font-size: 18px;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        body.bg-dark .text-muted {
+            color: #adb5bd !important;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 4px solid #e9ecef;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        body.bg-dark .profile-picture {
+            border-color: #6c757d;
+        }
+
+        .profile-picture:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-picture.bg-secondary {
+            background-color: #6c757d !important;
+        }
+
+        body.bg-dark .profile-picture.bg-secondary {
+            background-color: #495057 !important;
+        }
+
+        .professional-btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary.professional-btn {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary.professional-btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        body.bg-dark .btn-primary.professional-btn {
+            background-color: #66b0ff;
+            border-color: #66b0ff;
+        }
+
+        body.bg-dark .btn-primary.professional-btn:hover {
+            background-color: #4da8ff;
+            border-color: #4da8ff;
+        }
+
+        .btn-outline-secondary.professional-btn {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-outline-secondary.professional-btn:hover {
+            background-color: #6c757d;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        }
+
+        body.bg-dark .btn-outline-secondary.professional-btn {
+            border-color: #adb5bd;
+            color: #adb5bd;
+        }
+
+        body.bg-dark .btn-outline-secondary.professional-btn:hover {
+            background-color: #adb5bd;
+            color: #212529;
+        }
+
+        .alert {
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        body.bg-dark .alert-danger {
+            background-color: #dc3545;
+            color: #f8f9fa;
+        }
+
+        .text-danger {
+            font-size: 0.9rem;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .spinner-border {
+            width: 1rem;
+            height: 1rem;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 991px) {
+            .edit-profile-wrapper {
+                padding-top: 140px; /* Collapsed navbar height (100px) + 40px gap */
+            }
+        }
+
+        @media (max-width: 767px) {
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+            .form-label {
+                font-size: 1rem;
+            }
+            .form-control,
+            .form-control-file {
+                font-size: 0.9rem;
+            }
+        }
+
+        .navbar.shrunk ~ .content .edit-profile-wrapper {
+            padding-top: 80px; /* Shrunk navbar height (40px) + 40px gap */
+        }
+    </style>
+
+    <!-- JavaScript for Profile Picture Preview -->
+    <script>
+        document.getElementById("id_profile_picture").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById("profile-picture-preview");
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove("d-none");
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add("d-none");
+            }
+        });
+
+        function clearProfilePicture() {
+            const input = document.getElementById("id_profile_picture");
+            const preview = document.getElementById("profile-picture-preview");
+            input.value = ""; // Clear the file input
+            preview.classList.add("d-none"); // Hide the preview
+        }
+
+        document.querySelector("form").addEventListener("submit", function () {
+            const btn = document.getElementById("save-changes-btn");
+            btn.querySelector(".spinner-border").classList.remove("d-none");
+            btn.querySelector(".button-text").textContent = "Saving...";
+            btn.disabled = true;
+        });
+    </script>
+{% endblock %}

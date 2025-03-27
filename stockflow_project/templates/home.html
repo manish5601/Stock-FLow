@@ -1,0 +1,171 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}StockFlow - Inventory Management{% endblock %}
+{% block content %}
+    <!-- Wrapper for Full-Page Background -->
+    <div class="page-wrapper">
+        <!-- Hero Section -->
+        <div class="container text-center text-dark py-5">
+            <!-- Messages -->
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Logo -->
+            <img src="{% static 'images/logo.png' %}" alt="StockFlow Logo" class="stockflow-logo mb-4">
+
+            <!-- Main Content -->
+            <h1 class="display-4 fw-bold">Welcome to StockFlow</h1>
+            <p class="lead">Your ultimate solution for inventory management.</p>
+            <p>Track your products, manage stock levels, and visualize your inventory with ease.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg mt-3">Go to Dashboard</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-lg mt-3">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg mt-3 ms-2">Login</a>
+            {% endif %}
+        </div>
+
+        <!-- Features Section -->
+        <div class="container mt-5 mb-5">
+            <h2 class="text-center mb-4 text-dark">Why Choose StockFlow?</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card shadow card-animated">
+                        <div class="card-body">
+                            <h5 class="card-title">Track Inventory</h5>
+                            <p class="card-text">Easily add, update, and track your products in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow card-animated">
+                        <div class="card-body">
+                            <h5 class="card-title">Visualize Data</h5>
+                            <p class="card-text">Get insights with bar, pie, and line charts for better decision-making.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow card-animated">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage Transactions</h5>
+                            <p class="card-text">Record stock in and out transactions with ease.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Full-Page Wrapper */
+        .page-wrapper {
+            background-color: #f8f9fa; /* Solid background color (same as body default) */
+            min-height: 20vh; /* Ensure it covers the full viewport height */
+            padding-top: 20px; /* Increased for default navbar height + gap */
+        }
+
+        /* Dark Mode for Page Wrapper */
+        body.bg-dark .page-wrapper {
+            background-color: #212529; /* Match dark mode body background */
+        }
+
+        /* Logo Styling */
+        .stockflow-logo {
+            max-width: 200px; /* Adjust size as needed */
+            height: auto;
+        }
+
+        /* Text Styling */
+        .text-dark {
+            color: #212529 !important; /* Dark text for light background */
+        }
+
+        body.bg-dark .text-dark {
+            color: #f8f9fa !important; /* Light text for dark background */
+        }
+
+        .display-4 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: none; /* Remove shadow since no background image */
+        }
+
+        .lead {
+            font-size: 1.5rem;
+            text-shadow: none; /* Remove shadow since no background image */
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            border: none;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0056b3, #003d80);
+            transform: scale(1.05);
+        }
+
+        .btn-outline-primary {
+            color: #007bff;
+            border-color: #007bff;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: #007bff;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* Adjust button colors for dark mode */
+        body.bg-dark .btn-outline-primary {
+            color: #66b0ff; /* Lighter blue for dark mode */
+            border-color: #66b0ff;
+        }
+
+        body.bg-dark .btn-outline-primary:hover {
+            background: #66b0ff;
+            color: #212529;
+        }
+
+        /* Features Section */
+        .card-animated {
+            background: #ffffff; /* Solid white background for cards */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.bg-dark .card-animated {
+            background: #343a40; /* Darker background for cards in dark mode */
+        }
+
+        .card-animated:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .page-wrapper {
+                padding-top: 140px; /* More padding on smaller screens due to collapsed navbar + gap */
+            }
+        }
+
+        /* Adjust padding when navbar shrinks */
+        .navbar.shrunk ~ .content .page-wrapper {
+            padding-top: 80px; /* Increased for shrunk navbar height + gap */
+        }
+    </style>
+{% endblock %}

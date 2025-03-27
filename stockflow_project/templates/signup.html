@@ -1,0 +1,231 @@
+<!-- templates/signup.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign Up - StockFlow{% endblock %}
+{% block content %}
+    <!-- Signup Page Wrapper -->
+    <div class="signup-wrapper">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow signup-card">
+                        <div class="card-body">
+                            <h2 class="card-title text-center mb-4 text-dark">Sign Up for StockFlow</h2>
+                            <!-- Form Errors -->
+                            {% if form.errors %}
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <p>There was an error with your signup. Please try again.</p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                            <!-- Signup Form -->
+                            <form method="post">
+                                {% csrf_token %}
+                                <!-- Username Field -->
+                                <div class="mb-3 position-relative">
+                                    <label for="id_username" class="form-label">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-person field-icon"></i>
+                                        </span>
+                                        <input type="text" name="username" id="id_username" class="form-control professional-input" placeholder="Enter your username" required>
+                                    </div>
+                                    {% if form.username.errors %}
+                                        <div class="text-danger mt-1 small">{{ form.username.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Email Field -->
+                                <div class="mb-3 position-relative">
+                                    <label for="id_email" class="form-label">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-envelope field-icon"></i>
+                                        </span>
+                                        <input type="email" name="email" id="id_email" class="form-control professional-input" placeholder="Enter your email" required>
+                                    </div>
+                                    {% if form.email.errors %}
+                                        <div class="text-danger mt-1 small">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Password Field -->
+                                <div class="mb-3 position-relative">
+                                    <label for="id_password1" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-lock field-icon"></i>
+                                        </span>
+                                        <input type="password" name="password1" id="id_password1" class="form-control professional-input" placeholder="Enter your password" required>
+                                    </div>
+                                    {% if form.password1.errors %}
+                                        <div class="text-danger mt-1 small">{{ form.password1.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Confirm Password Field -->
+                                <div class="mb-3 position-relative">
+                                    <label for="id_password2" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-icon text-muted">
+                                            <i class="bi bi-lock field-icon"></i>
+                                        </span>
+                                        <input type="password" name="password2" id="id_password2" class="form-control professional-input" placeholder="Confirm your password" required>
+                                    </div>
+                                    {% if form.password2.errors %}
+                                        <div class="text-danger mt-1 small">{{ form.password2.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Submit Button -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary professional-btn">Sign Up</button>
+                                </div>
+                            </form>
+                            <!-- Login Link -->
+                            <p class="text-center mt-3">
+                                Already have an account? <a href="{% url 'login' %}" class="text-primary professional-link">Login</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Signup Page Wrapper */
+        .signup-wrapper {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            padding-top: 110px; /* Navbar height (70px) + 40px gap */
+        }
+
+        body.bg-dark .signup-wrapper {
+            background-color: #212529;
+        }
+
+        .text-dark {
+            color: #212529 !important;
+        }
+
+        body.bg-dark .text-dark {
+            color: #f8f9fa !important;
+        }
+
+        .signup-card {
+            border-radius: 15px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.bg-dark .signup-card {
+            background: #343a40;
+            border-color: #495057;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .signup-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        body.bg-dark .signup-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control.professional-input {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control.professional-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
+        }
+
+        body.bg-dark .form-control.professional-input {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        body.bg-dark .form-control.professional-input:focus {
+            border-color: #66b0ff;
+            box-shadow: 0 0 6px rgba(102, 176, 255, 0.2);
+        }
+
+        .input-group-text.bg-icon {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        body.bg-dark .input-group-text.bg-icon {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .field-icon {
+            font-size: 18px;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        body.bg-dark .text-muted {
+            color: #adb5bd !important;
+        }
+
+        .professional-btn {
+            background: #007bff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .professional-btn:hover {
+            background: #0056b3;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+        .professional-link {
+            color: #007bff;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .professional-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        body.bg-dark .professional-link {
+            color: #66b0ff;
+        }
+
+        body.bg-dark .professional-link:hover {
+            color: #4da8ff;
+        }
+
+        .text-danger {
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 991px) {
+            .signup-wrapper {
+                padding-top: 140px; /* Collapsed navbar height (100px) + 40px gap */
+            }
+        }
+
+        .navbar.shrunk ~ .content .signup-wrapper {
+            padding-top: 80px; /* Shrunk navbar height (40px) + 40px gap */
+        }
+    </style>
+{% endblock %}
