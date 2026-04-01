@@ -1,0 +1,11 @@
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stockflow"
+version = "0.0.1"
+
+[tool.setuptools.scripts]
+app = "stockflow_project.stockflow_project.wsgi:application"
